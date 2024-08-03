@@ -6,6 +6,7 @@ import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/notificationsSettings.dart';
 import 'package:budget/widgets/periodCyclePicker.dart';
 import 'package:budget/widgets/selectAmount.dart';
+import 'package:budget/functions.dart';
 import 'package:drift/drift.dart' show Value;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -198,7 +199,7 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
     "premiumPopupAddTransactionLastShown": DateTime.now().toString(),
     "premiumPopupFreeSeen": false,
     "previewDemo": false,
-    "purchaseID": null,
+    "purchaseID": getLifetimeProductID(),
     "showAccountLabelTagInTransactionEntry": false,
     "showTransactionsMonthlySpendingSummary": true,
     "showTransactionsBalanceTransferTab": true,

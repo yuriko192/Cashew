@@ -1481,3 +1481,9 @@ extension AlignmentDirectionality on Alignment {
     }
   }
 }
+
+String getLifetimeProductID(){
+  return getPlatform(ignoreEmulation: true) == PlatformOS.isIOS
+      ? 'cashew.pro.life' //iOS
+      : 'cashew.pro.lifetime'; //Android
+}

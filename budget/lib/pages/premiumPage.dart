@@ -39,9 +39,7 @@ Map<String, String> productIDs = {
   'monthly': getPlatform(ignoreEmulation: true) == PlatformOS.isIOS
       ? 'cashew.pro.monthly' //iOS
       : 'cashew.pro.monthly', //Android
-  'lifetime': getPlatform(ignoreEmulation: true) == PlatformOS.isIOS
-      ? 'cashew.pro.life' //iOS
-      : 'cashew.pro.lifetime', //Android
+  'lifetime': getLifetimeProductID(), //Android
 };
 
 // A user has paid is appStateSettings["purchaseID"] is not null
@@ -630,7 +628,7 @@ Future<Map<String, ProductDetails>> initializeStoreAndPurchases(
     final bool available = await InAppPurchase.instance.isAvailable();
     if (available) {
       //Reset any purchases if we can connect to the store, they will be restored if a purchase was made
-      updateSettings("purchaseID", null, updateGlobalState: false);
+      updateSettings("purchaseID", getLifetimeProductID(), updateGlobalState: false);
 
       Stream<List<PurchaseDetails>> purchaseUpdated =
           InAppPurchase.instance.purchaseStream;
