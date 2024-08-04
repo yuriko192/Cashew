@@ -13,8 +13,6 @@ import 'package:drift/drift.dart' hide Query, Column;
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart' hide Transaction;
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:budget/struct/firebaseAuthGlobal.dart';
 
 Future<bool> shareBudget(Budget? budgetToShare, context) async {

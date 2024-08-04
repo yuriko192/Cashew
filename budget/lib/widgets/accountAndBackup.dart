@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:budget/colors.dart';
 import 'package:budget/database/generatePreviewData.dart';
 import 'package:budget/database/tables.dart';
-import 'package:budget/firebase_options.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
 import 'package:budget/pages/aboutPage.dart';
@@ -31,12 +30,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:googleapis/abusiveexperiencereport/v1.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
-import 'package:googleapis/drive/v3.dart' as drive;
-import 'package:googleapis/gmail/v1.dart' as gMail;
-import 'package:google_sign_in/google_sign_in.dart' as signIn;
 import 'package:http/http.dart' as http;
 import 'package:shimmer/shimmer.dart';
 import 'package:universal_html/html.dart' as html;
@@ -73,161 +68,161 @@ class GoogleAuthClient extends http.BaseClient {
 signIn.GoogleSignIn? googleSignIn;
 signIn.GoogleSignInAccount? googleUser;
 
-Future<bool> signInGoogle(
-    {BuildContext? context,
-    bool? waitForCompletion,
-    bool? drivePermissions,
-    bool? gMailPermissions,
-    bool? drivePermissionsAttachments,
-    bool? silentSignIn,
-    Function()? next}) async {
-  // bool isConnected = false;
-  if (await checkLockedFeatureIfInDemoMode(context) == false) return false;
-  if (appStateSettings["emailScanning"] == false) gMailPermissions = false;
+// Future<bool> signInGoogle(
+//     {BuildContext? context,
+//     bool? waitForCompletion,
+//     bool? drivePermissions,
+//     bool? gMailPermissions,
+//     bool? drivePermissionsAttachments,
+//     bool? silentSignIn,
+//     Function()? next}) async {
+//   // bool isConnected = false;
+//   if (await checkLockedFeatureIfInDemoMode(context) == false) return false;
+//   if (appStateSettings["emailScanning"] == false) gMailPermissions = false;
+//
+//   try {
+//     if (gMailPermissions == true &&
+//         googleUser != null &&
+//         !(await testIfHasGmailAccess())) {
+//       await signOutGoogle();
+//       googleSignIn = null;
+//       settingsPageStateKey.currentState?.refreshState();
+//     } else if (googleUser == null) {
+//       googleSignIn = null;
+//       settingsPageStateKey.currentState?.refreshState();
+//     }
+//     //Check connection
+//     // isConnected = await checkConnection().timeout(Duration(milliseconds: 2500),
+//     //     onTimeout: () {
+//     //   throw ("There was an error checking your connection");
+//     // });
+//     // if (isConnected == false) {
+//     //   if (context != null) {
+//     //     openSnackbar(context, "Could not connect to network",
+//     //         backgroundColor: lightenPastel(Theme.of(context).colorScheme.error,
+//     //             amount: 0.6));
+//     //   }
+//     //   return false;
+//     // }
+//
+//     if (waitForCompletion == true && context != null) openLoadingPopup(context);
+//     if (googleUser == null) {
+//       List<String> scopes = [
+//         ...(drivePermissions == true ? [drive.DriveApi.driveAppdataScope] : []),
+//         ...(drivePermissionsAttachments == true
+//             ? [drive.DriveApi.driveFileScope]
+//             : []),
+//         ...(gMailPermissions == true
+//             ? [
+//                 gMail.GmailApi.gmailReadonlyScope,
+//                 gMail.GmailApi
+//                     .gmailModifyScope //We do this so the emails can be marked read
+//               ]
+//             : [])
+//       ];
+//       googleSignIn = getPlatform() == PlatformOS.isIOS
+//           ? signIn.GoogleSignIn(
+//               clientId: DefaultFirebaseOptions.currentPlatform.iosClientId,
+//               scopes: scopes)
+//           : signIn.GoogleSignIn.standard(scopes: scopes);
+//       // googleSignIn?.currentUser?.clearAuthCache();
+//
+//       final signIn.GoogleSignInAccount? account = silentSignIn == true
+//           ?
+//           // kIsWeb
+//           //     ? await googleSignIn?.signInSilently()
+//           // Google Sign-in silent on web no longer gives access to the scopes
+//           // https://pub.dev/packages/google_sign_in_web#differences-between-google-identity-services-sdk-and-google-sign-in-for-web-sdk
+//           // await googleSignIn?.signInSilently().then((value) async {
+//           //     return await googleSignIn?.signIn();
+//           //   })
+//           // Currently we do not use silent sign in anymore, as it does not allow any access
+//           // to GDrive or other tools, so there is no point to get the username/email form silent
+//           kIsWeb
+//               ? await googleSignIn?.signIn()
+//               : await googleSignIn?.signInSilently()
+//           : await googleSignIn?.signIn();
+//
+//       if (account != null) {
+//         // print("ACCOUNT");
+//         // print(account);
+//         googleUser = account;
+//         updateSettings(
+//           "currentUserEmail",
+//           googleUser?.email ?? "",
+//           updateGlobalState: true,
+//           forceGlobalStateUpdate:
+//               context == null || getIsFullScreen(context) ? true : false,
+//         );
+//         accountsPageStateKey.currentState?.refreshState();
+//         settingsPageStateKey.currentState?.refreshState();
+//       } else {
+//         throw ("Login failed");
+//       }
+//     }
+//     if (waitForCompletion == true && context != null)
+//       Navigator.of(context).pop();
+//     if (next != null) next();
+//
+//     if (appStateSettings["hasSignedIn"] == false) {
+//       updateSettings("hasSignedIn", true, updateGlobalState: false);
+//     }
+//
+//     return true;
+//   } catch (e) {
+//     print(e);
+//     if (waitForCompletion == true && context != null)
+//       Navigator.of(context).pop();
+//     openSnackbar(
+//       SnackbarMessage(
+//         title: "sign-in-error".tr(),
+//         description: "sign-in-error-description".tr(),
+//         icon: appStateSettings["outlinedIcons"]
+//             ? Icons.error_outlined
+//             : Icons.error_rounded,
+//         timeout: Duration(milliseconds: 3400),
+//       ),
+//     );
+//     updateSettings("currentUserEmail", "", updateGlobalState: true);
+//     if (runningCloudFunctions) {
+//       errorSigningInDuringCloud = true;
+//     } else {
+//       updateSettings("hasSignedIn", false, updateGlobalState: false);
+//     }
+//     throw ("Error signing in");
+//   }
+// }
 
-  try {
-    if (gMailPermissions == true &&
-        googleUser != null &&
-        !(await testIfHasGmailAccess())) {
-      await signOutGoogle();
-      googleSignIn = null;
-      settingsPageStateKey.currentState?.refreshState();
-    } else if (googleUser == null) {
-      googleSignIn = null;
-      settingsPageStateKey.currentState?.refreshState();
-    }
-    //Check connection
-    // isConnected = await checkConnection().timeout(Duration(milliseconds: 2500),
-    //     onTimeout: () {
-    //   throw ("There was an error checking your connection");
-    // });
-    // if (isConnected == false) {
-    //   if (context != null) {
-    //     openSnackbar(context, "Could not connect to network",
-    //         backgroundColor: lightenPastel(Theme.of(context).colorScheme.error,
-    //             amount: 0.6));
-    //   }
-    //   return false;
-    // }
+// Future<bool> testIfHasGmailAccess() async {
+//   print("TESTING GMAIL");
+//   try {
+//     final authHeaders = await googleUser!.authHeaders;
+//     final authenticateClient = GoogleAuthClient(authHeaders);
+//     gMail.GmailApi gmailApi = gMail.GmailApi(authenticateClient);
+//     gMail.ListMessagesResponse results = await gmailApi.users.messages
+//         .list(googleUser!.id.toString(), maxResults: 1);
+//   } catch (e) {
+//     print(e.toString());
+//     print("NO GMAIL");
+//     return false;
+//   }
+//   return true;
+// }
 
-    if (waitForCompletion == true && context != null) openLoadingPopup(context);
-    if (googleUser == null) {
-      List<String> scopes = [
-        ...(drivePermissions == true ? [drive.DriveApi.driveAppdataScope] : []),
-        ...(drivePermissionsAttachments == true
-            ? [drive.DriveApi.driveFileScope]
-            : []),
-        ...(gMailPermissions == true
-            ? [
-                gMail.GmailApi.gmailReadonlyScope,
-                gMail.GmailApi
-                    .gmailModifyScope //We do this so the emails can be marked read
-              ]
-            : [])
-      ];
-      googleSignIn = getPlatform() == PlatformOS.isIOS
-          ? signIn.GoogleSignIn(
-              clientId: DefaultFirebaseOptions.currentPlatform.iosClientId,
-              scopes: scopes)
-          : signIn.GoogleSignIn.standard(scopes: scopes);
-      // googleSignIn?.currentUser?.clearAuthCache();
+// Future<bool> signOutGoogle() async {
+//   await googleSignIn?.signOut();
+//   googleUser = null;
+//   updateSettings("currentUserEmail", "", updateGlobalState: true);
+//   updateSettings("hasSignedIn", false, updateGlobalState: false);
+//   print("Signedout");
+//   return true;
+// }
 
-      final signIn.GoogleSignInAccount? account = silentSignIn == true
-          ?
-          // kIsWeb
-          //     ? await googleSignIn?.signInSilently()
-          // Google Sign-in silent on web no longer gives access to the scopes
-          // https://pub.dev/packages/google_sign_in_web#differences-between-google-identity-services-sdk-and-google-sign-in-for-web-sdk
-          // await googleSignIn?.signInSilently().then((value) async {
-          //     return await googleSignIn?.signIn();
-          //   })
-          // Currently we do not use silent sign in anymore, as it does not allow any access
-          // to GDrive or other tools, so there is no point to get the username/email form silent
-          kIsWeb
-              ? await googleSignIn?.signIn()
-              : await googleSignIn?.signInSilently()
-          : await googleSignIn?.signIn();
-
-      if (account != null) {
-        // print("ACCOUNT");
-        // print(account);
-        googleUser = account;
-        updateSettings(
-          "currentUserEmail",
-          googleUser?.email ?? "",
-          updateGlobalState: true,
-          forceGlobalStateUpdate:
-              context == null || getIsFullScreen(context) ? true : false,
-        );
-        accountsPageStateKey.currentState?.refreshState();
-        settingsPageStateKey.currentState?.refreshState();
-      } else {
-        throw ("Login failed");
-      }
-    }
-    if (waitForCompletion == true && context != null)
-      Navigator.of(context).pop();
-    if (next != null) next();
-
-    if (appStateSettings["hasSignedIn"] == false) {
-      updateSettings("hasSignedIn", true, updateGlobalState: false);
-    }
-
-    return true;
-  } catch (e) {
-    print(e);
-    if (waitForCompletion == true && context != null)
-      Navigator.of(context).pop();
-    openSnackbar(
-      SnackbarMessage(
-        title: "sign-in-error".tr(),
-        description: "sign-in-error-description".tr(),
-        icon: appStateSettings["outlinedIcons"]
-            ? Icons.error_outlined
-            : Icons.error_rounded,
-        timeout: Duration(milliseconds: 3400),
-      ),
-    );
-    updateSettings("currentUserEmail", "", updateGlobalState: true);
-    if (runningCloudFunctions) {
-      errorSigningInDuringCloud = true;
-    } else {
-      updateSettings("hasSignedIn", false, updateGlobalState: false);
-    }
-    throw ("Error signing in");
-  }
-}
-
-Future<bool> testIfHasGmailAccess() async {
-  print("TESTING GMAIL");
-  try {
-    final authHeaders = await googleUser!.authHeaders;
-    final authenticateClient = GoogleAuthClient(authHeaders);
-    gMail.GmailApi gmailApi = gMail.GmailApi(authenticateClient);
-    gMail.ListMessagesResponse results = await gmailApi.users.messages
-        .list(googleUser!.id.toString(), maxResults: 1);
-  } catch (e) {
-    print(e.toString());
-    print("NO GMAIL");
-    return false;
-  }
-  return true;
-}
-
-Future<bool> signOutGoogle() async {
-  await googleSignIn?.signOut();
-  googleUser = null;
-  updateSettings("currentUserEmail", "", updateGlobalState: true);
-  updateSettings("hasSignedIn", false, updateGlobalState: false);
-  print("Signedout");
-  return true;
-}
-
-Future<bool> refreshGoogleSignIn() async {
-  await signOutGoogle();
-  await signInGoogle(silentSignIn: kIsWeb ? false : true);
-  return true;
-}
+// Future<bool> refreshGoogleSignIn() async {
+//   await signOutGoogle();
+//   await signInGoogle(silentSignIn: kIsWeb ? false : true);
+//   return true;
+// }
 
 Future<bool> signInAndSync(BuildContext context,
     {required dynamic Function() next}) async {
@@ -755,35 +750,35 @@ class _GoogleAccountLoginButtonState extends State<GoogleAccountLoginButton> {
   }
 }
 
-Future<(drive.DriveApi? driveApi, List<drive.File>?)> getDriveFiles() async {
-  try {
-    final authHeaders = await googleUser!.authHeaders;
-    final authenticateClient = GoogleAuthClient(authHeaders);
-    drive.DriveApi driveApi = drive.DriveApi(authenticateClient);
-
-    drive.FileList fileList = await driveApi.files.list(
-        spaces: 'appDataFolder',
-        $fields: 'files(id, name, modifiedTime, size)');
-    return (driveApi, fileList.files);
-  } catch (e) {
-    if (e is DetailedApiRequestError && e.status == 401) {
-      await refreshGoogleSignIn();
-      return await getDriveFiles();
-    } else if (e is PlatformException) {
-      await refreshGoogleSignIn();
-      return await getDriveFiles();
-    } else {
-      openSnackbar(
-        SnackbarMessage(
-            title: e.toString(),
-            icon: appStateSettings["outlinedIcons"]
-                ? Icons.error_outlined
-                : Icons.error_rounded),
-      );
-    }
-  }
-  return (null, null);
-}
+// Future<(drive.DriveApi? driveApi, List<drive.File>?)> getDriveFiles() async {
+//   try {
+//     final authHeaders = await googleUser!.authHeaders;
+//     final authenticateClient = GoogleAuthClient(authHeaders);
+//     drive.DriveApi driveApi = drive.DriveApi(authenticateClient);
+//
+//     drive.FileList fileList = await driveApi.files.list(
+//         spaces: 'appDataFolder',
+//         $fields: 'files(id, name, modifiedTime, size)');
+//     return (driveApi, fileList.files);
+//   } catch (e) {
+//     if (e is DetailedApiRequestError && e.status == 401) {
+//       await refreshGoogleSignIn();
+//       return await getDriveFiles();
+//     } else if (e is PlatformException) {
+//       await refreshGoogleSignIn();
+//       return await getDriveFiles();
+//     } else {
+//       openSnackbar(
+//         SnackbarMessage(
+//             title: e.toString(),
+//             icon: appStateSettings["outlinedIcons"]
+//                 ? Icons.error_outlined
+//                 : Icons.error_rounded),
+//       );
+//     }
+//   }
+//   return (null, null);
+// }
 
 class BackupManagement extends StatefulWidget {
   const BackupManagement({
@@ -1495,33 +1490,33 @@ class LoadingShimmerDriveFiles extends StatelessWidget {
   }
 }
 
-Future<bool> saveDriveFileToDevice({
-  required BuildContext boxContext,
-  required drive.DriveApi driveApi,
-  required drive.File fileToSave,
-}) async {
-  List<int> dataStore = [];
-  dynamic response = await driveApi.files
-      .get(fileToSave.id!, downloadOptions: drive.DownloadOptions.fullMedia);
-  await for (var data in response.stream) {
-    dataStore.insertAll(dataStore.length, data);
-  }
-  String fileName = "cashew-" +
-      ((fileToSave.name ?? "") +
-              cleanFileNameString(
-                  (fileToSave.modifiedTime ?? DateTime.now()).toString()))
-          .replaceAll(".sqlite", "") +
-      ".sql";
-
-  return await saveFile(
-    boxContext: boxContext,
-    dataStore: dataStore,
-    dataString: null,
-    fileName: fileName,
-    successMessage: "backup-downloaded-success".tr(),
-    errorMessage: "error-downloading".tr(),
-  );
-}
+// Future<bool> saveDriveFileToDevice({
+//   required BuildContext boxContext,
+//   required drive.DriveApi driveApi,
+//   required drive.File fileToSave,
+// }) async {
+//   List<int> dataStore = [];
+//   dynamic response = await driveApi.files
+//       .get(fileToSave.id!, downloadOptions: drive.DownloadOptions.fullMedia);
+//   await for (var data in response.stream) {
+//     dataStore.insertAll(dataStore.length, data);
+//   }
+//   String fileName = "cashew-" +
+//       ((fileToSave.name ?? "") +
+//               cleanFileNameString(
+//                   (fileToSave.modifiedTime ?? DateTime.now()).toString()))
+//           .replaceAll(".sqlite", "") +
+//       ".sql";
+//
+//   return await saveFile(
+//     boxContext: boxContext,
+//     dataStore: dataStore,
+//     dataString: null,
+//     fileName: fileName,
+//     successMessage: "backup-downloaded-success".tr(),
+//     errorMessage: "error-downloading".tr(),
+//   );
+// }
 
 bool openBackupReminderPopupCheck(BuildContext context) {
   if ((appStateSettings["currentUserEmail"] == null ||
