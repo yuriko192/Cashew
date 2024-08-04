@@ -2,7 +2,7 @@
   "hosting": {
     "public": "build/web",
     "predeploy": "flutter build web --release --web-renderer canvaskit --no-tree-shake-icons",
-    "site":"budget-track",
+    "site": "budget-track",
     "ignore": [
       "firebase.json",
       "**/.*",
@@ -14,5 +14,26 @@
         "destination": "/index.html"
       }
     ]
+  },
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "budget-man-2d0a7",
+          "appId": "1:159036836616:android:b63e604703b84d753b3abd",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "budget-man-2d0a7",
+          "configurations": {
+            "android": "1:159036836616:android:b63e604703b84d753b3abd",
+            "ios": "1:159036836616:ios:5f11190acfb72d633b3abd",
+            "web": "1:159036836616:web:e4df9bfc8d1815ed3b3abd"
+          }
+        }
+      }
+    }
   }
 }

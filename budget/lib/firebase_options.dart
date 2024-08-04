@@ -47,30 +47,30 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyBGiaRl72d4k3Ki0dh8ra-gU4v2z04CgIw',
-    appId: '1:267621253497:web:12558fe9abebf7fa842fa8',
-    messagingSenderId: '267621253497',
-    projectId: 'budget-app-flutter',
-    authDomain: 'budget-app-flutter.firebaseapp.com',
-    storageBucket: 'budget-app-flutter.appspot.com',
+    apiKey: 'AIzaSyCaS4Lf0HdSNf3J8UBxDfuytP_i_ALoKPU',
+    appId: '1:159036836616:web:e4df9bfc8d1815ed3b3abd',
+    messagingSenderId: '159036836616',
+    projectId: 'budget-man-2d0a7',
+    authDomain: 'budget-man-2d0a7.firebaseapp.com',
+    storageBucket: 'budget-man-2d0a7.appspot.com',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDNVDtwGJUHBZohwB2RDeUco-5hAGfx2bA',
-    appId: '1:267621253497:android:e7a2967eaf8dd072842fa8',
-    messagingSenderId: '267621253497',
-    projectId: 'budget-app-flutter',
-    storageBucket: 'budget-app-flutter.appspot.com',
+    apiKey: 'AIzaSyDcheO68KB76i1t_bCTvnku61Pghncxsww',
+    appId: '1:159036836616:android:b63e604703b84d753b3abd',
+    messagingSenderId: '159036836616',
+    projectId: 'budget-man-2d0a7',
+    storageBucket: 'budget-man-2d0a7.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBts7THLrbIh-xReN70k5AsknAMwBNhrD0',
-    appId: '1:267621253497:ios:17af91fbac7c01b9842fa8',
-    messagingSenderId: '267621253497',
-    projectId: 'budget-app-flutter',
-    storageBucket: 'budget-app-flutter.appspot.com',
-    androidClientId: '267621253497-0h976snjlf34gs8m75bh8nik8gcvr2mk.apps.googleusercontent.com',
-    iosClientId: '267621253497-ih94g1srq37gun4mdmvadgl3ev588vpf.apps.googleusercontent.com',
-    iosBundleId: 'com.budget.tracker-app',
+    apiKey: 'AIzaSyB2frGyHzYmdN4E8C7wdDjcV4OIJe00A8M',
+    appId: '1:159036836616:ios:5f11190acfb72d633b3abd',
+    messagingSenderId: '159036836616',
+    projectId: 'budget-man-2d0a7',
+    storageBucket: 'budget-man-2d0a7.appspot.com',
+    iosClientId: '159036836616-h8b7hme80b18c64af1nutg9lde6kg0f0.apps.googleusercontent.com',
+    iosBundleId: 'com.budget.budget.RunnerTests',
   );
+
 }
